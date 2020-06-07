@@ -15,9 +15,6 @@ void rhs_fun(double t, double *X, double *F)
 	F[0]= X[1];
 	F[1]= -g+(pow(R-abs(X[0]),2)*(2*R+abs(X[0]))*g)/(2*pow(R,3));
 }
-void zamiana(double *a, double s){
-*a=s;
-}
 
 void main()
 {
@@ -27,9 +24,7 @@ void main()
 	printf("Wprowadz wartosc pretkosci poczatkowej(vz(t)=/=0):");
 	scanf("%lf",&X[1]);
 	printf("Wprowadz wartosc promienia(R>0):");
-	double s;
-	scanf("%lf",&s);
-	zamiana(&R,s);
+	scanf("%lf",&R);
 	double h=0.001, X1[2];
 	graphics(1000,1000);
 	scale(0,-1,1,6);//pierwsza x druga y
