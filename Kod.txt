@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
+#include "winbgi2.h"
+#include "rk4.h"
+
+double g = 9.81;
+double PI = 4.0 * atan(1.0);
+double R = 1.0;
+double qw = 997;
+
+void rhs_fun(double t, double *X, double *F)
+{
+	F[0]= X[1];
+	F[1]= -g+(pow(R-abs(X[0]),2)*(2*R+abs(X[0]))*g)/(2*pow(R,3));
+}
+void zamiana(double *a, double s){
+*a=s;
+}
+
+void main()
+{
+	double X[2];
+	printf("Wprowadz wartosc polozenia poczatkowego(z(t)=/=0):");
+	scanf("%lf",&X[0]);
+	printf("Wprowadz wartosc pretkosci poczatkowej(vz(t)=/=0):");
+	scanf("%lf",&X[1]);
+	printf("Wprowadz wartosc promienia(R>0):");
+	double s;
+	scanf("%lf",&s);
+	zamiana(&R,s);
+	double h=0.001, X1[2];
+	graphics(1000,1000);
+	scale(0,-1,1,6);//pierwsza x druga y
+	for(double t=0;t<10;t=t+h){
+		vrk4(0,X, h, 2, rhs_fun, X1);
+		X[0]=X1[0];
+		X[1]=X1[1];
+		if(abs(X[0])<0.01){
+			break;
+		}
+		//point(t,X1[0]);
+		
+		double m=qw*PI*pow(R,3)*2/3;
+		double energy=X[1]*X[1]*m/2+m*g*(2*R-X[0]);
+		printf( "%.4lf\t %.4lf\t energy=%.4lf[J]\n ",X1[0] , X1[1], energy);
+		point(t,energy/10000);
+		
+	}
+
+	wait();
+}
